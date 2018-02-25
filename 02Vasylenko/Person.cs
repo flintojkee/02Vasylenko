@@ -54,6 +54,7 @@ namespace _02Vasylenko
         private bool _isBirthday;
         public DateTime DateOfBirth { get; set; }
         private int _age;
+        private bool _isReal;
 
         public Person(string name, string lastName, string email, DateTime dateOfBirth)
         {
@@ -79,6 +80,15 @@ namespace _02Vasylenko
         public Person(DateTime dateOfBirth)
         {
             DateOfBirth = dateOfBirth;
+        }
+
+        public bool IsReal
+        {
+            get
+            {
+                isReal();
+                return _isReal;
+            }
         }
 
         public Person()
@@ -180,6 +190,15 @@ namespace _02Vasylenko
         {
             if(DateOfBirth.Day == DateTime.Today.Day)_isBirthday = true;
         }
+        private void isReal()
+        {
+            int check = DateTime.Today.Year - DateOfBirth.Year;
+            if (DateTime.Today.Date < DateOfBirth.Date || check > 135) _isReal = false;
+            else
+            {
+                _isReal = true;
+            }
         }
-
+    }
+        
     }

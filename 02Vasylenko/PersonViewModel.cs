@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -21,7 +17,7 @@ namespace _02Vasylenko
             domObject = new Person();
             PersonManager = new PersonManager();
             _Persons = new ObservableCollection<Person>();
-            AddPersonCmd = new RelayCommand(Add);
+            AddPersonCmd = new RelayCommand(Add, CanAdd);
         }
         public string LastName
         {
@@ -80,18 +76,31 @@ namespace _02Vasylenko
         public ObservableCollection<Person> Persons { get { return _Persons; } }
         public ICommand AddPersonCmd { get; }
 
-
+        public bool CanAdd(object obj)
+        {
+            if(LastName != String.Empty&& Name !=String.Empty && Email != String.Empty&& DateOfBirth!= DateTime.MinValue)
+            {
+                return true;
+            }
+            return false;
+        }
         public void Add(object obj)
         {
             var person = new Person {LastName = LastName, Name = Name, Email = Email, DateOfBirth = DateOfBirth};
-            if (PersonManager.Add(person))
+            if (person.IsReal)
             {
-                Persons.Add(person);
-                ResetPerson();
-                MessageBox.Show("Person Add Successful !");
+                if (PersonManager.Add(person))
+                {
+                    Persons.Add(person);
+                    ResetPerson();
+                    if (person.DateOfBirth.DayOfYear.Equals(DateTime.Today.DayOfYear)) MessageBox.Show("HappyBirthday");
+                }
             }
             else
-                MessageBox.Show("Person with this ID already exists !");
+            {
+                MessageBox.Show("You can`t exist in real world. Check daybirth field, please.");
+            }
+           
         }
 
    
